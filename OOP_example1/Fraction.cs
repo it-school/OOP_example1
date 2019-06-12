@@ -8,14 +8,15 @@ namespace OOP_example1
 {
     class Fraction
     {
-        int numerator;
-        int denominator;
+        private int numerator;  // числитель
+        private int denominator; // знаменатель
 
         public int Numerator { get => numerator; set => numerator = value; }
         public int Denominator { get => denominator; set => denominator = (value != 0 ? value : 1); }
 
         public Fraction()
         {
+            this.numerator = 0;
             this.denominator = 1;
         }
 
@@ -25,65 +26,92 @@ namespace OOP_example1
             this.denominator = 1;
         }
 
-        public Fraction(int numerator, int denominator) : this(numerator)
-        {
-            this.Denominator = denominator;
-        }
-        /*
         public Fraction(int numerator, int denominator)
         {
             this.numerator = numerator;
             this.Denominator = denominator;
         }
-         */
+
 
         override public String ToString()
         {
-            return "\n" + this.numerator + "\n---\n" + this.denominator;
+            return " " + this.Numerator + "/" + this.Denominator;
         }
 
         public void Reverse()
         {
-            int numerator = this.numerator;
-            this.numerator = this.denominator;
-            this.denominator = numerator;
+            int numerator = this.Numerator;
+            this.Numerator = this.Denominator;
+            this.Denominator = numerator;
+        }
+
+        public String ReversedString()
+        {
+            Fraction tempFraction = new Fraction(this.numerator, this.denominator);
+            tempFraction.Reverse();
+            return tempFraction.ToString();
+        }
+
+        public Fraction Reversed()
+        {
+            return new Fraction(this.denominator, this.numerator);
+        }
+
+        public static Fraction operator +(Fraction f1, Fraction f2)
+        {
+            Fraction temp = new Fraction(f1.numerator, f1.denominator);
+            temp.Add(f2);
+            temp.Simplify();
+            return temp;
         }
 
         public void Add(Fraction fraction)
         {
             /*
-              1       3      5 + 6    11
-             ---  +  --- =  ------ = ----
-              2       5       10      10
+              1       3      1*5 + 3*2     11
+             ---  +  --- =  ----------- = ----
+              2       5       2 * 5        10
              */
-            int commonDenominator = this.denominator * fraction.denominator;
-            int commonNumerator = this.numerator * fraction.denominator + fraction.numerator * this.denominator;
+            int commonDenominator = this.Denominator * fraction.Denominator;
+            int commonNumerator = this.Numerator * fraction.Denominator + fraction.Numerator * this.Denominator;
 
-            this.numerator = commonNumerator;
-            this.denominator = commonDenominator;
+            this.Numerator = commonNumerator;
+            this.Denominator = commonDenominator;
         }
+
+        public Fraction Add(Fraction fractionLeft, Fraction fractionRight)
+        {
+            int numeratorNew = fractionLeft.numerator * fractionRight.denominator + fractionRight.numerator * fractionLeft.denominator;
+            int denominatorNew = fractionLeft.Denominator * fractionRight.denominator;
+            this.numerator = numeratorNew;
+            this.denominator = denominatorNew;
+            return this;
+        }
+
+
 
         public void Mult(Fraction fraction)
         {
-            this.numerator *= fraction.numerator;
-            this.denominator *= fraction.denominator;
+            this.Numerator *= fraction.Numerator;
+            this.Denominator *= fraction.Denominator;
+            this.Simplify();
         }
 
         public void Mult(int multiplier)
         {
-            this.numerator *= multiplier;
+            this.Numerator *= multiplier;
         }
 
         public void Simplify()
         {
-            int tNumerator = this.numerator;
-            int tDenominator = this.denominator;
+            int tNumerator = this.Numerator;
+            int tDenominator = this.Denominator;
             int n = 0;
             if (tDenominator % tNumerator == 0)
             {
-                denominator /= numerator;
-                numerator = 1;
-                Console.WriteLine($"Coomon steps for simplification: 1");
+                Denominator /= Numerator;
+                Numerator = 1;
+                Console.WriteLine($"Common steps for simplification: 1");
 
                 return;
             }
@@ -99,8 +127,8 @@ namespace OOP_example1
                 }
             }
 
-            this.numerator = tNumerator;
-            this.denominator = tDenominator;
+            this.Numerator = tNumerator;
+            this.Denominator = tDenominator;
             Console.WriteLine($"Coomon steps for simplification: {n}");
         }
     }
